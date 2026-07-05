@@ -19,6 +19,8 @@ import { rehypeAonoteMathml } from '../plugins/rehype-aonote-mathml';
 import { rehypeAonoteSlug } from '../plugins/rehype-aonote-slug';
 import { transformerAonote } from '../plugins/shiki-aonote';
 
+import rehypeKatex from 'rehype-katex'
+
 /** Central Aonote markdown pipeline (remark/rehype/shiki) for posts and pages. */
 export function aonoteMarkdown(): AstroIntegration {
   return {
@@ -45,6 +47,7 @@ export function aonoteMarkdown(): AstroIntegration {
               rehypeAonoteMathml,
               () => rehypeAonoteEnhance(),
               () => rehypeAonoteFinalize(),
+              rehypeKatex,
             ],
             shikiConfig: {
               themes: {

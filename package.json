@@ -37,6 +37,7 @@
     "hast-util-from-html": "^2.0.3",
     "image-size": "^2.0.2",
     "mdast-util-to-string": "^4.0.0",
+    "rehype-katex": "^7.0.1",
     "remark-deflist": "^1.0.0",
     "remark-directive": "^3.0.0",
     "remark-directive-rehype": "^1.0.0",
