@@ -1,6 +1,6 @@
 ---
-title: About Aonote
-date: 2025-12-01
+title: About Me
+date: 2025-06-26
 summary: Design goals, scope, and customization for this Astro port of Aonote.
 ---
 

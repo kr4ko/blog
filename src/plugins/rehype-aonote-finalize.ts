@@ -3,7 +3,6 @@ import type { Element, Root } from 'hast';
 import { expandHlLinesTokens, parseHlLinesMeta } from '../utils/hl-lines';
 import { addClass, getClasses, hasClass, setClasses } from '../utils/hast-classes';
 import type { ElementContent } from 'hast';
-import { t, type Locale } from '../i18n';
 import { wrapCodeBlocks, wrapTables } from './rehype-aonote';
 
 const LANG_LABELS: Record<string, string> = {
@@ -32,12 +31,10 @@ function langLabel(lang: string): string {
 }
 
 /** Run after Shiki: wrap blocks, then set data-lang / data-title on .highlight. */
-export function rehypeAonoteFinalize(options: { locale?: Locale } = {}) {
-  const locale = options.locale ?? 'en';
-  const i18n = t(locale);
+export function rehypeAonoteFinalize() {
   return (tree: Root) => {
-    wrapTables(tree, locale);
-    wrapCodeBlocks(tree, locale);
+    wrapTables(tree);
+    wrapCodeBlocks(tree);
 
     visit(tree, 'element', (node) => {
       if (node.tagName !== 'div') return;
@@ -106,10 +103,10 @@ export function rehypeAonoteFinalize(options: { locale?: Locale } = {}) {
           const classes = getClasses(line);
           if (text.startsWith('-')) {
             setClasses(line, [...classes.filter((c) => c !== 'gi'), 'gd']);
-            prependLabel(line, i18n.diffRemovedLineLabel);
+            prependLabel(line, 'Removed line: ');
           } else if (text.startsWith('+')) {
             setClasses(line, [...classes.filter((c) => c !== 'gd'), 'gi']);
-            prependLabel(line, i18n.diffAddedLineLabel);
+            prependLabel(line, 'Added line: ');
           }
         });
       }

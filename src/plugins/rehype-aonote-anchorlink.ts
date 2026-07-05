@@ -1,7 +1,6 @@
 import type { Element, Root } from 'hast';
 import { toString } from 'mdast-util-to-string';
 import { visit } from 'unist-util-visit';
-import { t, type Locale } from '../i18n';
 
 function hasClass(node: Element, name: string): boolean {
   const cls = node.properties?.className;
@@ -20,9 +19,7 @@ function hasToclink(node: Element): boolean {
 }
 
 /** Match upstream Python-Markdown `toc.anchorlink`: heading text links to its id. */
-export function rehypeAonoteAnchorlink(options: { locale?: Locale } = {}) {
-  const locale = options.locale ?? 'en';
-  const i18n = t(locale);
+export function rehypeAonoteAnchorlink() {
 
   return (tree: Root) => {
     visit(tree, 'element', (node: Element) => {
@@ -41,7 +38,7 @@ export function rehypeAonoteAnchorlink(options: { locale?: Locale } = {}) {
         properties: {
           className: ['toclink'],
           href: `#${idStr}`,
-          ariaLabel: i18n.headingAnchorLabel(label),
+          ariaLabel: `Link to ${label}`,
         },
         children: [...node.children],
       };

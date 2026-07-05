@@ -4,12 +4,11 @@ export const site = {
   baseUrl: 'https://astro-theme-aonote.vercel.app',
   /** GitHub Pages subpath, e.g. "/repo-name". Leave empty for root deploy. */
   repoSubpath: '',
-  title: 'Aonote',
+  title: 'Kr4ko',
   description:
-    'A static notebook for data science, minimalism, and the open web.',
-  author: 'Aonote',
-  /** UI language: "zh-CN" | "en" */
-  language: 'en' as 'zh-CN' | 'en',
+    'My Blog',
+  author: 'Kr4ko',
+  language: 'ja',
   maxPostsOnIndex: 5,
   copyright: {
     enable: true,

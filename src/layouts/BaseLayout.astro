@@ -2,7 +2,6 @@
 import '../styles/aonote.css';
 import { site } from '../site.config';
 import { siteHref } from '../utils/paths';
-import { t, type Locale } from '../i18n';
 
 interface Props {
   title: string;
@@ -26,8 +25,6 @@ const {
   articlePublishedTime,
 } = Astro.props;
 
-const locale = site.language as Locale;
-const i18n = t(locale);
 const homeHref = siteHref('/');
 const currentPath = Astro.url.pathname;
 const year = new Date().getFullYear();
@@ -43,6 +40,7 @@ function navCurrent(path: string) {
   const href = siteHref(normalized);
   if (path === '/') return pageId === 'index';
   if (normalized === '/about/') return pageId === 'about';
+  if (normalized === '/footprint/') return pageId === 'footprint';
   if (normalized === '/archive/') return pageId === 'archive';
   if (normalized === '/tags/') return pageId === 'tags';
   return normalizePath(currentPath) === href;
@@ -50,7 +48,7 @@ function navCurrent(path: string) {
 ---
 
 <!doctype html>
-<html lang={i18n.htmlLang}>
+<html lang="ja">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -83,27 +81,29 @@ function navCurrent(path: string) {
     <link rel="alternate" type="application/atom+xml" title={`${site.title} Atom Feed`} href={siteHref('/atom.xml')} />
   </head>
   <body class={`page-${pageId}`}>
-    <a href="#main-content" class="skip-link">{i18n.skipToContent}</a>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
 
     <header>
       <div class="header-inner">
         <a href={homeHref} class="site-title">{site.title}</a>
-        <nav class="desktop-nav" aria-label={i18n.mainNavigation}>
-          <a href={siteHref('/')} aria-current={navCurrent('/') ? 'page' : undefined}>{i18n.navHome}</a>
-          <a href={siteHref('/archive/')} aria-current={navCurrent('/archive') ? 'page' : undefined}>{i18n.navArchive}</a>
-          <a href={siteHref('/tags/')} aria-current={navCurrent('/tags') ? 'page' : undefined}>{i18n.navTags}</a>
-          <a href={siteHref('/about/')} aria-current={navCurrent('/about') ? 'page' : undefined}>{i18n.navAbout}</a>
+        <nav class="desktop-nav" aria-label={'Main navigation'}>
+          <a href={siteHref('/')} aria-current={navCurrent('/') ? 'page' : undefined}>Home</a>
+          <a href={siteHref('/archive/')} aria-current={navCurrent('/archive') ? 'page' : undefined}>Archive</a>
+          <a href={siteHref('/tags/')} aria-current={navCurrent('/tags') ? 'page' : undefined}>Tags</a>
+          <a href={siteHref('/footprint/')} aria-current={navCurrent('/footprint') ? 'page' : undefined}>Footprint</a>
+          <a href={siteHref('/about/')} aria-current={navCurrent('/about') ? 'page' : undefined}>About</a>
         </nav>
         <details class="mobile-nav-menu">
-          <summary aria-label={i18n.navMenu}>
-            <span class="visually-hidden">{i18n.navMenu}</span>
+          <summary aria-label={'Menu'}>
+            <span class="visually-hidden">'Menu'</span>
             <span class="hamburger-icon" aria-hidden="true"></span>
           </summary>
-          <nav class="mobile-nav-links" aria-label={i18n.mainNavigation}>
-            <a href={siteHref('/')} aria-current={navCurrent('/') && pageId === 'index' ? 'page' : undefined}>{i18n.navHome}</a>
-            <a href={siteHref('/archive/')} aria-current={navCurrent('/archive') ? 'page' : undefined}>{i18n.navArchive}</a>
-            <a href={siteHref('/tags/')} aria-current={navCurrent('/tags') ? 'page' : undefined}>{i18n.navTags}</a>
-            <a href={siteHref('/about/')} aria-current={navCurrent('/about') ? 'page' : undefined}>{i18n.navAbout}</a>
+          <nav class="mobile-nav-links" aria-label={'Main navigation'}>
+            <a href={siteHref('/')} aria-current={navCurrent('/') && pageId === 'index' ? 'page' : undefined}>Home</a>
+            <a href={siteHref('/archive/')} aria-current={navCurrent('/archive') ? 'page' : undefined}>Archive</a>
+            <a href={siteHref('/tags/')} aria-current={navCurrent('/tags') ? 'page' : undefined}>Tags</a>
+            <a href={siteHref('/footprint/')} aria-current={navCurrent('/footprint') ? 'page' : undefined}>Footprint</a>
+            <a href={siteHref('/about/')} aria-current={navCurrent('/about') ? 'page' : undefined}>About</a>
           </nav>
         </details>
       </div>
@@ -129,8 +129,8 @@ function navCurrent(path: string) {
           <span class="copyright-info">&copy; {year} {site.author}.</span>
         </div>
         <div class="footer-right">
-          <a href={siteHref('/feed/')}>{i18n.rssSubscribe}</a>
-          <a href="#main-content" class="back-to-top">{i18n.backToTop}</a>
+          <a href={siteHref('/feed/')}>RSS Feed</a>
+          <a href="#main-content" class="back-to-top">Back to top</a>
         </div>
       </div>
     </footer>

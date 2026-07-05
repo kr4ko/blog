@@ -6,7 +6,6 @@ import {
   getLicenseIcon,
   shouldShowCopyright,
 } from '../utils/copyright';
-import { t } from '../i18n';
 
 interface Props {
   postTitle: string;
@@ -14,15 +13,13 @@ interface Props {
 }
 
 const { postTitle, canonicalUrl } = Astro.props;
-const locale = site.language;
-const i18n = t(locale);
 const cfg = site.copyright;
 const show = shouldShowCopyright(cfg);
 const licenseKey = cfg.type.replace(/\./g, '_');
-const notice = show ? getCopyrightNotice(licenseKey, locale) : '';
+const notice = show ? getCopyrightNotice(licenseKey) : '';
 const icon = show && cfg.showLicenseIcon ? getLicenseIcon(licenseKey) : null;
-const formatBlock = formatCopyrightBlock(postTitle, site.author, canonicalUrl, locale);
-const additionalNote = cfg.additionalNote || i18n.copyrightAdditionalNote;
+const formatBlock = formatCopyrightBlock(postTitle, site.author, canonicalUrl);
+const additionalNote = cfg.additionalNote;
 ---
 
 {show && (

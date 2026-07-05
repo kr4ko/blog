@@ -1,3 +1,4 @@
+import 'mdast-util-to-hast';
 import { visit } from 'unist-util-visit';
 import type { Root } from 'mdast';
 import { expandHlLinesTokens } from '../utils/hl-lines';

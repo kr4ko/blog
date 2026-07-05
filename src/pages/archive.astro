@@ -1,19 +1,16 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { site } from '../site.config';
-import { t } from '../i18n';
 import { formatArchiveDate, getBlogPosts, groupPostsByYear, postUrl } from '../utils/posts';
 
 const blogPosts = await getBlogPosts();
 const byYear = groupPostsByYear(blogPosts);
-const i18n = t(site.language);
 const canonicalUrl = new URL('/archive/', Astro.site).href;
 ---
 
-<BaseLayout title={i18n.pageArchive} pageId="archive" canonicalUrl={canonicalUrl} hiddenPageTitle>
+<BaseLayout title="Archive" pageId="archive" canonicalUrl={canonicalUrl} hiddenPageTitle>
   <div class="archive-page">
     {blogPosts.length === 0 ? (
-      <p class="empty-state">{i18n.noArchive}</p>
+      <p class="empty-state">No archive yes.</p>
     ) : (
       [...byYear.entries()].map(([year, yearPosts]) => (
         <>

@@ -2,7 +2,6 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PostCard from '../../components/PostCard.astro';
 import { site } from '../../site.config';
-import { t } from '../../i18n';
 import { tagToSlug } from '../../utils/slug';
 import { siteHref } from '../../utils/paths';
 import { getBlogPosts } from '../../utils/posts';
@@ -23,19 +22,18 @@ export async function getStaticPaths() {
 }
 
 const { tag, posts } = Astro.props;
-const i18n = t(site.language);
 ---
 
-<BaseLayout title={`${i18n.pageTagPrefix}: ${tag}`} pageId="tag">
+<BaseLayout title={`Tag: ${tag}`} pageId="tag">
   <div class="tag-meta-info">
     <h1 class="page-list-title"># {tag}</h1>
-    <p class="tag-count">{i18n.tagPostCount(posts.length)}</p>
-    <a href={siteHref('/tags/')} class="button button-secondary button-small">← {i18n.allTags}</a>
+    <p class="tag-count">{posts.length} posts</p>
+    <a href={siteHref('/tags/')} class="button button-secondary button-small">All tags</a>
   </div>
   <hr class="section-divider" />
   <div class="post-list">
     {posts.length === 0 ? (
-      <p class="empty-state">{i18n.noPosts}</p>
+      <p class="empty-state">No posts yet.</p>
     ) : (
       posts.map((post) => <PostCard post={post} />)
     )}

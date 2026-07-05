@@ -3,7 +3,6 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Copyright from '../../components/Copyright.astro';
 import TocNav from '../../components/TocNav.astro';
 import { site } from '../../site.config';
-import { t } from '../../i18n';
 import { absoluteUrl } from '../../utils/paths';
 import {
   formatDate,
@@ -32,7 +31,6 @@ interface Props {
 const { post, allBlogPosts } = Astro.props;
 const { Content, headings } = await render(post);
 const { prev, next } = getAdjacentPosts(allBlogPosts, post);
-const i18n = t(site.language);
 const canonicalUrl = absoluteUrl(`/posts/${postSlug(post)}/`);
 const dateIso = post.data.date.toISOString().split('T')[0];
 const articlePublishedIso = post.data.date.toISOString();
@@ -80,8 +78,8 @@ const hasToc = tocHeadings.some((h) => h.depth >= 1 && h.depth <= 4);
 
       {hasToc && (
         <details class="mobile-toc">
-          <summary>{i18n.toc}</summary>
-          <nav class="mobile-toc-content" aria-label={i18n.toc}>
+          <summary>Contents</summary>
+          <nav class="mobile-toc-content" aria-label="Contents">
             <TocNav headings={tocHeadings} />
           </nav>
         </details>
@@ -98,7 +96,7 @@ const hasToc = tocHeadings.some((h) => h.depth >= 1 && h.depth <= 4);
       <nav class="post-navigation">
         {prev ? (
           <a href={postUrl(prev)} class="nav-link nav-prev">
-            <small>← {i18n.prevPost}</small>
+            <small>Previous post</small>
             <h3>{prev.data.title}</h3>
           </a>
         ) : (
@@ -106,7 +104,7 @@ const hasToc = tocHeadings.some((h) => h.depth >= 1 && h.depth <= 4);
         )}
         {next ? (
           <a href={postUrl(next)} class="nav-link nav-next">
-            <small>{i18n.nextPost} →</small>
+            <small>Next post</small>
             <h3>{next.data.title}</h3>
           </a>
         ) : (
@@ -117,8 +115,8 @@ const hasToc = tocHeadings.some((h) => h.depth >= 1 && h.depth <= 4);
   </article>
 
   {hasToc && (
-    <nav slot="toc" class="toc-area" aria-label={i18n.toc}>
-      <h3>{i18n.toc}</h3>
+    <nav slot="toc" class="toc-area" aria-label="Contents">
+      <h3>Contents</h3>
       <TocNav headings={tocHeadings} />
     </nav>
   )}

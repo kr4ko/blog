@@ -21,8 +21,6 @@ import { transformerAonote } from '../plugins/shiki-aonote';
 
 /** Central Aonote markdown pipeline (remark/rehype/shiki) for posts and pages. */
 export function aonoteMarkdown(): AstroIntegration {
-  const locale = site.language;
-
   return {
     name: 'aonote-markdown',
     hooks: {
@@ -43,10 +41,10 @@ export function aonoteMarkdown(): AstroIntegration {
             ],
             rehypePlugins: [
               rehypeAonoteSlug,
-              () => rehypeAonoteAnchorlink({ locale }),
+              () => rehypeAonoteAnchorlink(),
               rehypeAonoteMathml,
-              () => rehypeAonoteEnhance({ locale }),
-              () => rehypeAonoteFinalize({ locale }),
+              () => rehypeAonoteEnhance(),
+              () => rehypeAonoteFinalize(),
             ],
             shikiConfig: {
               themes: {

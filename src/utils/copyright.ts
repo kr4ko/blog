@@ -1,8 +1,7 @@
 import type { SiteConfig } from '../site.config';
-import { t, type Locale } from '../i18n';
-import type { COPYRIGHT_LICENSE_NOTICES } from '../i18n-licenses';
+import { COPYRIGHT_LICENSE_NOTICES } from '../copyright_license_notices';
 
-type CopyrightLicenseKey = keyof (typeof COPYRIGHT_LICENSE_NOTICES)['zh-CN'];
+type CopyrightLicenseKey = keyof (typeof COPYRIGHT_LICENSE_NOTICES);
 
 const LICENSE_ICONS: Record<string, string> = {
   CC_BY_4_0: 'CC-BY',
@@ -29,10 +28,9 @@ const LICENSE_ICONS: Record<string, string> = {
 };
 
 export function getCopyrightNotice(
-  licenseType: string,
-  locale: Locale,
+  licenseType: string
 ): string {
-  const notices = t(locale).copyrightLicenseNotices;
+  const notices = COPYRIGHT_LICENSE_NOTICES;
   if (licenseType in notices) {
     return notices[licenseType as CopyrightLicenseKey];
   }
@@ -47,9 +45,8 @@ export function formatCopyrightBlock(
   title: string,
   author: string,
   url: string,
-  locale: Locale,
 ): string {
-  return t(locale).copyrightFormatTemplate(title, author, url);
+  return `Title: ${title}\nAuthor: ${author}\nOriginal link: <a href="${url}">${url}</a>`;
 }
 
 export function shouldShowCopyright(config: SiteConfig['copyright']): boolean {

@@ -2,7 +2,6 @@ import { visit } from 'unist-util-visit';
 import type { Parent } from 'unist';
 import type { Element, Root, ElementContent } from 'hast';
 import type { VFile } from 'vfile';
-import { t, type Locale } from '../i18n';
 import { readImageDimensions, resolveImagePath } from '../utils/image-dimensions';
 import { parseTableCaptionLine } from '../utils/table-caption';
 
@@ -171,10 +170,9 @@ function transformDirectivesToAdmonitions(tree: Root) {
   });
 }
 
-export function wrapTables(tree: Root, locale: Locale) {
-  const i18n = t(locale);
-  const tableCaptionPrefix = i18n.tableCaptionPrefix;
-  const fallbackLabel = i18n.tableScrollRegionFallbackLabel;
+export function wrapTables(tree: Root) {
+  const tableCaptionPrefix = 'Table: ';
+  const fallbackLabel = 'Horizontally scrollable table';
 
   visit(tree, 'element', (node, _index, parent) => {
     if (node.tagName !== 'table' || !isParent(parent)) return;
@@ -235,7 +233,7 @@ export function wrapTables(tree: Root, locale: Locale) {
         role: 'region',
         tabIndex: 0,
         ariaLabel: captionText
-          ? i18n.tableScrollRegionLabel(captionText)
+          ? `Horizontally scrollable table: ${captionText}`
           : fallbackLabel,
       },
       children: [node],
@@ -244,8 +242,7 @@ export function wrapTables(tree: Root, locale: Locale) {
   });
 }
 
-export function wrapCodeBlocks(tree: Root, locale: Locale) {
-  const i18n = t(locale);
+export function wrapCodeBlocks(tree: Root) {
   visit(tree, 'element', (node, _index, parent) => {
     if (node.tagName !== 'pre' || !isParent(parent)) return;
     const index = parent.children.indexOf(node);
@@ -297,7 +294,7 @@ export function wrapCodeBlocks(tree: Root, locale: Locale) {
     node.properties = {
       ...node.properties,
       tabIndex: 0,
-      ariaLabel: label ? i18n.codeBlockLanguageLabel(label) : i18n.codeBlockLabel,
+      ariaLabel: label ? `Code block, language ${label}` : 'Code block',
     };
 
     parent.children[index] = wrapper;
@@ -324,8 +321,7 @@ function applyLineHighlights(pre: Element, lines: number[]) {
   });
 }
 
-function enhanceFootnotes(tree: Root, locale: Locale) {
-  const i18n = t(locale);
+function enhanceFootnotes(tree: Root) {
   visit(tree, 'element', (node) => {
     if (
       node.tagName === 'section' &&
@@ -347,7 +343,7 @@ function enhanceFootnotes(tree: Root, locale: Locale) {
       const num = extractText(node) || '1';
       node.properties = {
         ...node.properties,
-        ariaLabel: i18n.footnoteRefLabel(num),
+        ariaLabel: `Footnote ${num}`,
       };
     }
     if (
@@ -362,14 +358,13 @@ function enhanceFootnotes(tree: Root, locale: Locale) {
         '1';
       node.properties = {
         ...node.properties,
-        ariaLabel: i18n.footnoteBackrefLabel(num),
+        ariaLabel: `Back to footnote ${num} reference`,
       };
     }
   });
 }
 
-function enhanceTaskLists(tree: Root, locale: Locale) {
-  const i18n = t(locale);
+function enhanceTaskLists(tree: Root) {
   visit(tree, 'element', (node) => {
     if (!hasClass(node, 'task-list-item')) return;
     const input = node.children.find(
@@ -378,8 +373,8 @@ function enhanceTaskLists(tree: Root, locale: Locale) {
     const checked = Boolean(input?.properties?.checked);
     const taskText = extractText(node).replace(/\s+/g, ' ').trim();
     const label = checked
-      ? i18n.taskCompletedLabel(taskText)
-      : i18n.taskIncompleteLabel(taskText);
+      ? `Completed task: ${taskText}`
+      : `Incomplete task: ${taskText}`;
 
     if (input) {
       input.properties = {
@@ -519,14 +514,13 @@ function mapDirectiveContainers(tree: Root) {
   });
 }
 
-export function rehypeAonoteEnhance(options: { locale?: Locale } = {}) {
-  const locale = options.locale ?? 'en';
+export function rehypeAonoteEnhance() {
   return (tree: Root, file?: VFile) => {
     mapDirectiveContainers(tree);
     transformDirectivesToAdmonitions(tree);
     enhanceImages(tree, file?.path);
     enhanceImageCaptions(tree);
-    enhanceFootnotes(tree, locale);
-    enhanceTaskLists(tree, locale);
+    enhanceFootnotes(tree);
+    enhanceTaskLists(tree);
   };
 }
